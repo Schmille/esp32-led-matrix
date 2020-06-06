@@ -5,10 +5,13 @@
 /**
  * Heavily influenced by the code and the blog posts from https://github.com/nickgammon/MAX7219_Dot_Matrix
  */
-LedMatrix::LedMatrix(byte numberOfDevices, byte slaveSelectPin) {
+LedMatrix::LedMatrix(byte numberOfDevices, int8_t sck, int8_t miso, int8_t mosi, byte slaveSelectPin) {
     myNumberOfDevices = numberOfDevices;
     mySlaveSelectPin = slaveSelectPin;
     cols = new byte[numberOfDevices * 8];
+	_sck = sck;
+    _miso = miso;
+    _mosi = mosi;
 }
 
 /**
@@ -18,7 +21,7 @@ LedMatrix::LedMatrix(byte numberOfDevices, byte slaveSelectPin) {
 void LedMatrix::init() {
     pinMode(mySlaveSelectPin, OUTPUT);
 
-    SPI.begin ();
+    SPI.begin ( _sck,  _miso,  _mosi,  mySlaveSelectPin);
     SPI.setDataMode(SPI_MODE0);
     SPI.setClockDivider(SPI_CLOCK_DIV128);
     for(byte device = 0; device < myNumberOfDevices; device++) {
