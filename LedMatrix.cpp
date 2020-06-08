@@ -134,7 +134,15 @@ void LedMatrix::setNextText(String nextText) {
 
 void LedMatrix::scrollTextRight() {
   if(myTextOffset == 0 + myTextAlignmentOffset) {
-    myTextOffset = -myTextLength - myTextAlignmentOffset;
+      myTextOffset = -myTextLength - myTextAlignmentOffset;
+
+      if(myNextText[0] != '\0') {
+        myTextOffset = 0;
+        myText = myNextText;
+        myNextText = "";
+        myTextLength = 0;
+        for (int i = 0; i < myText.length(); i++) myTextLength += cp437_width[(byte)myText.charAt(i)];
+      }
   }
 
   myTextOffset += 1;
