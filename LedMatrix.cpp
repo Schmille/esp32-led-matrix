@@ -54,7 +54,12 @@ void LedMatrix::sendByte (const byte reg, const byte data) {
 }
 
 void LedMatrix::setIntensity(const byte intensity) {
+    intensityVal = intensity;
     sendByte(MAX7219_REG_INTENSITY, intensity);
+}
+
+byte LedMatrix::getIntensity() {
+  return intensityVal;
 }
 
 void LedMatrix::setTextAlignment(byte textAlignment) {
@@ -173,6 +178,23 @@ void LedMatrix::oscillateText() {
     else {
      scrollTextLeft(); 
     }  
+}
+
+void LedMatrix::breathe(const byte lower, const byte upper) {
+  if(intensityRising) {
+    if(intensityVal >= upper) {
+      intensityRising = false;
+      return;
+    }
+    setIntensity(intensityVal + 1);
+  }
+  else {
+    if(intensityVal <= lower) {
+      intensityRising = true;
+      return;
+    }
+    setIntensity(intensityVal - 1);
+  }
 }
 
 void LedMatrix::updateNewText() {

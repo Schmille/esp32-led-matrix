@@ -45,6 +45,12 @@ public:
     void setIntensity(byte intensity);
 
     /**
+     * Returns the intensity
+     * intensity: 0-15
+     */
+    byte getIntensity();
+
+    /**
      * Sets the text alignment.
      * Default is TEXT_ALIGN_LEFT_END.
      *
@@ -118,6 +124,13 @@ public:
     void oscillateText();
 
     /**
+     * Dynamically set the LED intensity between two limits.
+     * lower: 0-15
+     * upper: 0-15
+     */
+    void breathe(const byte lower, const byte upper);
+
+    /**
      * Display is mounted 90 degree right.
      */
     void setAlternateDisplayOrientation(byte x = 1);
@@ -143,6 +156,8 @@ private:
     int8_t _miso;
     int8_t _mosi;
     bool rightScrolling = false;
+    byte intensityVal = 0;
+    bool intensityRising = true;
     void calculateTextAlignmentOffset();
     void updateNewText();
 };
