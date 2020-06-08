@@ -9,7 +9,7 @@ LedMatrix::LedMatrix(byte numberOfDevices, int8_t sck, int8_t miso, int8_t mosi,
     myNumberOfDevices = numberOfDevices;
     mySlaveSelectPin = slaveSelectPin;
     cols = new byte[numberOfDevices * 8];
-	_sck = sck;
+	  _sck = sck;
     _miso = miso;
     _mosi = mosi;
 }
@@ -133,46 +133,57 @@ void LedMatrix::setNextText(String nextText) {
 }
 
 void LedMatrix::scrollTextRight() {
-  if(myTextOffset == 0 + myTextAlignmentOffset) {
+  if(myTextOffset >= 0) {
       myTextOffset = -myTextLength - myTextAlignmentOffset;
-
-      if(myNextText[0] != '\0') {
-        myTextOffset = 0;
-        myText = myNextText;
-        myNextText = "";
-        myTextLength = 0;
-        for (int i = 0; i < myText.length(); i++) myTextLength += cp437_width[(byte)myText.charAt(i)];
+      if(hasNextText()) {
+        updateNewText();
       }
   }
-
-  myTextOffset += 1;
+  
   calculateTextAlignmentOffset();
+  myTextOffset += 1;
 }
 
-void LedMatrix::scrollTextLeft() {;
+void LedMatrix::scrollTextLeft() {
     myTextOffset = (myTextOffset - 1) % (myTextLength + myNumberOfDevices * 8);
     if (myTextOffset == 0 && myNextText.length() > 0) {
-        myText = myNextText;
-        myNextText = "";
-        myTextLength = 0;
-        for (int i = 0; i < myText.length(); i++) myTextLength += cp437_width[(byte)myText.charAt(i)];
+        updateNewText();
         calculateTextAlignmentOffset();
     }
 }
 
 void LedMatrix::oscillateText() {
-    int maxColumns = myTextLength;
-    int maxDisplayColumns = myNumberOfDevices * 8;
-    if (maxDisplayColumns > maxColumns) {
-        return;
+    if(myTextOffset - 1 == -(myTextLength + myTextAlignmentOffset) && !rightScrolling) {
+      rightScrolling = true;
+      if(hasNextText()) {
+        updateNewText();
+      }
     }
-    if (myTextOffset - maxDisplayColumns == -maxColumns) {
-        increment = 1;
+
+    if(myTextOffset == 0 && rightScrolling) { 
+      rightScrolling = false;
+      if(hasNextText()) {
+        updateNewText();
+      }
     }
-    if (myTextOffset == 0) {
-        increment = -1;
+
+    if(rightScrolling) {
+      scrollTextRight();
     }
-    myTextOffset += increment;
+    else {
+     scrollTextLeft(); 
+    }  
+}
+
+void LedMatrix::updateNewText() {
+  myText = myNextText;
+  myNextText = "";
+  myTextLength = 0;
+  for (int i = 0; i < myText.length(); i++) myTextLength += cp437_width[(byte)myText.charAt(i)];
+}
+
+bool LedMatrix::hasNextText() {
+  return myNextText[0] != '\0';
 }
 
 void LedMatrix::setAlternateDisplayOrientation(byte x) {

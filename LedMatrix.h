@@ -122,6 +122,11 @@ public:
      */
     void setAlternateDisplayOrientation(byte x = 1);
 
+    /**
+     * Returns true if the matrix has next text 
+     */
+    bool hasNextText();
+    
 private:
     byte* cols;
     String myText;
@@ -137,5 +142,7 @@ private:
 	int8_t _sck;
     int8_t _miso;
     int8_t _mosi;
+    bool rightScrolling = false;
     void calculateTextAlignmentOffset();
+    void updateNewText();
 };
