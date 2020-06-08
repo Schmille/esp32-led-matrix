@@ -129,12 +129,20 @@ void LedMatrix::setText(String text) {
     calculateTextAlignmentOffset();
 }
 
+String LedMatrix::getText() {
+  return myText;
+}
+
 int LedMatrix::getTextLength() {
     return myTextLength;
 }
 
 void LedMatrix::setNextText(String nextText) {
     myNextText = nextText;
+}
+
+String LedMatrix::getNextText() {
+  return myNextText;
 }
 
 void LedMatrix::scrollTextRight() {

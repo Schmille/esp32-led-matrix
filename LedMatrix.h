@@ -88,10 +88,21 @@ public:
     void setText(String text);
 
     /**
+     * Get the current Text
+     */
+    String getText();
+
+    /**
      * Set the text that will replace the current text after a complete scroll
      * cycle.
      */
     void setNextText(String nextText);
+
+    /**
+     * Get the text that will replace the current text after a complete scroll
+     * cycle.
+     */
+    String getNextText();
 
     /**
      * Get number of columns of Text (Pixel).
