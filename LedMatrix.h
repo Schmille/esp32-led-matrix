@@ -22,6 +22,8 @@
 #define TEXT_ALIGN_RIGHT_END     3 // End of text is just outside the left side of the display
 #define TEXT_ALIGN_CENTER        4 // Mid of text is just middle of the display
 
+typedef void (*Function) ();
+
 class LedMatrix {
 
 public:
@@ -150,6 +152,11 @@ public:
      * Returns true if the matrix has next text 
      */
     bool hasNextText();
+
+    /**
+     * Sets a function to be executed when the text leaves the screen
+     */
+    void setOnTextEnded(Function f);
     
 private:
     byte* cols;
@@ -169,6 +176,8 @@ private:
     bool rightScrolling = false;
     byte intensityVal = 0;
     bool intensityRising = true;
+    Function onTextEnded = nullptr;
     void calculateTextAlignmentOffset();
     void updateNewText();
+    void executeOnTextEnded();
 };

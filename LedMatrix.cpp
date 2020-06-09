@@ -147,6 +147,7 @@ String LedMatrix::getNextText() {
 
 void LedMatrix::scrollTextRight() {
   if(myTextOffset >= 0) {
+      executeOnTextEnded();
       myTextOffset = -myTextLength - myTextAlignmentOffset;
       if(hasNextText()) {
         updateNewText();
@@ -159,6 +160,11 @@ void LedMatrix::scrollTextRight() {
 
 void LedMatrix::scrollTextLeft() {
     myTextOffset = (myTextOffset - 1) % (myTextLength + myNumberOfDevices * 8);
+    
+    if (myTextOffset == 0) {
+      executeOnTextEnded();
+    }
+
     if (myTextOffset == 0 && myNextText.length() > 0) {
         updateNewText();
         calculateTextAlignmentOffset();
@@ -168,6 +174,7 @@ void LedMatrix::scrollTextLeft() {
 void LedMatrix::oscillateText() {
     if(myTextOffset - 1 == -(myTextLength + myTextAlignmentOffset) && !rightScrolling) {
       rightScrolling = true;
+      executeOnTextEnded();
       if(hasNextText()) {
         updateNewText();
       }
@@ -175,6 +182,7 @@ void LedMatrix::oscillateText() {
 
     if(myTextOffset == 0 && rightScrolling) { 
       rightScrolling = false;
+      executeOnTextEnded();
       if(hasNextText()) {
         updateNewText();
       }
@@ -294,4 +302,14 @@ void LedMatrix::setColumn(int column, byte value) {
 
 void LedMatrix::setPixel(byte x, byte y) {
     bitWrite(cols[x], y, true);
+}
+
+void LedMatrix::setOnTextEnded(Function f) {
+  onTextEnded = f;
+}
+
+void LedMatrix::executeOnTextEnded()  {
+  if ((*onTextEnded) != nullptr) {
+    (*onTextEnded)();
+  }
 }
