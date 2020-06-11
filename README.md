@@ -1,14 +1,20 @@
-visit IOTSHARING.COM for more
-
 This library is only for MAX7219.
 
-the original version is for esp8266, nhatuan84 modified a little to adapt with esp32.
+This library's original version was written for ESP8266, and was adapted by nhatuan84 to work with ESP32.
+Originally this library was used in [this](http://www.iotsharing.com/2017/05/how-to-use-arduino-esp32-to-display-spi-led-matrix.html) tutorial on [IOTSHARING.COM](iotsharing.com).
+gdampf later added support for 90° rotated displays as well as support for some additional characters and optimisations.
 
-I added support for 90 degree rotated displays
+Unfortunately I was not able to get either version working, thus this repository was created.
 
-Just clone the code and copy it Arduino/libraries folder
+To install the library, just clone the repository and copy it Arduino/libraries folder.
+(usually C:\Users\User\Documents\Arduino\libraries)
 
-Demo 5: How to use Arduino ESP32 to display information on SPI LED matrix
-http://www.iotsharing.com/2017/05/how-to-use-arduino-esp32-to-display-spi-led-matrix.html
 
-New Demo: Newsticker using newsapi.org 
+Examples added by nhatuan84:
+* esp32spi.ino
+
+Examples added by gdampf:
+* ESP-LED-Newsticker.ino
+* AnimateText.ino
+* AnimateText_UML.ino
+
